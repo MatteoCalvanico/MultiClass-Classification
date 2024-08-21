@@ -1,0 +1,133 @@
+{
+    "type" : "object",
+    "required" : [
+        "io", 
+        "parameters", 
+        "hyper_parameters", 
+        "train_parameters", 
+        "early_stop_parameters"
+    ],
+    "properties" : {
+        "io" : { 
+            "type" : "object",
+            "required" : [
+                "training_folder",
+                "validation_folder",
+                "test_folder",
+                "use_custom_dataset",
+                "out_folder"
+            ],
+            "properties" : {
+                "training_folder" : {"type" : "string"},
+                "validation_folder" : {"type" : "string"},
+                "test_folder" : {"type" : "string"},
+                "use_custom_dataset" : {"type" : "boolean"},
+                "out_folder" : {"type" : "string"}
+            }
+        },
+        "parameters" : {
+            "type" : "object",
+            "required" : [
+                "train",
+                "test",
+                "show_preview"
+            ],
+            "properties" : {
+                "train" : {"type" : "boolean"},
+                "test" : {"type" : "boolean"},
+                "show_preview" : {"type" : "boolean"}
+            }
+        },
+        "hyper_parameters" : {
+            "type" : "object",
+            "required" : [
+                "batch_size",
+                "epochs",
+                "learning_rate",
+                "momentum"
+            ],
+            "properties" : {
+                "batch_size" : {
+                    "type" : "number", 
+                    "minimum" : 1,
+                    "maximum" : 1024
+                },
+                "epochs" : {
+                    "type" : "number", 
+                    "minimum" : 1,
+                    "maximum" : 10000
+                },
+                "learning_rate" : {
+                    "type" : "number", 
+                    "minimum" : 0.000001,
+                    "maximum" : 100
+                },
+                "momentum" : {
+                    "type" : "number", 
+                    "minimum" : 0.000001,
+                    "maximum" : 100
+                }
+            }
+        },
+        "train_parameters" : {
+            "type" : "object",
+            "required" : [
+                "network_type",
+                "step_monitor",
+                "accuracy_target",
+                "accuracy_evaluation_epochs",
+                "reload_last_model"
+            ],
+            "properties" : {
+                "network_type" : {"type" : "string"},
+                "step_monitor" : {
+                    "type" : "number", 
+                    "minimum" : 0,
+                    "maximum" : 10000
+                },
+                "accuracy_target" : {
+                    "type" : "number",
+                    "minimum" : 0,
+                    "maximum" : 100
+                },
+                "accuracy_evaluation_epochs" : {
+                    "type" : "number", 
+                    "minimum" : 0,
+                    "maximum" : 10000
+                },
+                "reload_last_model" : {"type" : "boolean"}
+            }
+        },
+        "early_stop_parameters" : {
+            "type" : "object",
+            "required" : [
+                "loss_evaluation_epochs",
+                "start_epoch",
+                "patience",
+                "improvement_rate"
+            ],
+            "properties" : {
+                "loss_evaluation_epochs" : {
+                    "type" : "number", 
+                    "minimum" : 0,
+                    "maximum" : 10000
+                },
+                "start_epoch" : {
+                    "type" : "number", 
+                    "minimum" : 0,
+                    "maximum" : 10000
+                },
+                "patience" : {
+                    "type" : "number", 
+                    "minimum" : 1,
+                    "maximum" : 10000
+                },
+                "improvement_rate" : {
+                    "type" : "number", 
+                    "minimum" : 0,
+                    "maximum" : 100
+                }
+            }
+        }
+    }
+}
