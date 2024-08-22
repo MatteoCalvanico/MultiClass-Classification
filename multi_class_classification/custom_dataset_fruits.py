@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 from torch.utils.data import Dataset
 from visual_util import ColoredPrint as cp
+from PIL import Image
 
 
 class CustomDataset(Dataset):
@@ -57,12 +58,19 @@ class CustomDataset(Dataset):
         
         img = cv2.imread(self.image_files[index].as_posix())
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        class_idx = self.labels[index]
-
+        
+        img = Image.fromarray(img)  # Convert to PIL Image
         if self.transform:
-            return self.transform(img), class_idx
-        else:
-            return img, class_idx
+            img = self.transform(img)
+        class_idx = self.labels[index]
+        return img, class_idx
+        
+        #class_idx = self.labels[index]
+        #
+        #if self.transform:
+        #    return self.transform(img), class_idx
+        #else:
+        #    return img, class_idx
 
     def __analyze_root(self) -> bool:
         
