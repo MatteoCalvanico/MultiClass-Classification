@@ -1,6 +1,6 @@
 from net_runner import NetRunner
 from config_helper import check_and_get_configuration
-from custom_dataset_shapes import CustomDatasetShapes
+from custom_dataset_fruits import CustomDataset
 
 
 if __name__ == "__main__":
@@ -9,7 +9,7 @@ if __name__ == "__main__":
     cfg_obj = check_and_get_configuration('./config/config.json', './config/config_schema.json')
 
     # Uso un data loader semplicemente per ricavare le classi del dataset.
-    classes = CustomDatasetShapes(root=cfg_obj.io.training_folder, transform=None).classes
+    classes = CustomDataset(root=cfg_obj.io.training_folder, transform=None).classes
 
     # Creo l'oggetto che mi permettera' di addestrare e testare il modello.
     runner = NetRunner(cfg_obj, classes)

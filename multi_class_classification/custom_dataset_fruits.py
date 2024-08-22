@@ -1,11 +1,13 @@
 import sys
 import cv2
+import re
 
 from pathlib import Path
 from torch.utils.data import Dataset
+from visual_util import ColoredPrint as cp
 
 
-class CustomDatasetShapes(Dataset):
+class CustomDataset(Dataset):
 
     def __init__(self, root : str, transform = None, debug: bool = False) -> None:
 
@@ -21,6 +23,7 @@ class CustomDatasetShapes(Dataset):
         # - E' una cartella?
         # Se ci sono problemi, esco dallo script.
         if not self.__analyze_root():
+            cp.red("Error: path do not exist or is a directory !!!")
             sys.exit(-1)
         
         # A questo punto la cartella e' valida:
@@ -28,6 +31,7 @@ class CustomDatasetShapes(Dataset):
         # - Le immagini le considero con estensione bmp, png, jpeg e jpg.
         # Se non ci sono immagini, esco dallo script.
         if not self.__search_image_files():
+            cp.red("Error: the directory do not have any images !!!")
             sys.exit(-1)
 
         # A questo punto controllo la struttura di sotto-cartelle e file:
@@ -35,6 +39,7 @@ class CustomDatasetShapes(Dataset):
         # - Il nome di ogni sotto-cartella sara' una classe di immagini.
         # - In ogni sotto-cartella ci saranno solo immagini di quella classe.  
         if not self.__check_structure():
+            cp.red("Error: the root have more than one level !!!")
             sys.exit(-1)
         
         # Con la certezza che la struttura delle cartelle e' corretta, si
@@ -117,44 +122,45 @@ class CustomDatasetShapes(Dataset):
         # Raccolgo i nomi di tutte le sotto-cartelle, anche duplicati.
         sub_folder_names = [f.parts[-2] for f in self.image_files]
         
-        # Lascio solo valori univoci e ordinati alfabeticamente.
-        self.classes = sorted(list(set(sub_folder_names)))
+        # Rimuovo i numeri dalle classi e creo un mapping tra i nomi vecchi (con i numeri) e i nuovi
+        self.original_to_cleaned = {}
+        for name in sub_folder_names:
+            cleaned_name = re.sub(r'\d+', '', name)
+            self.original_to_cleaned[name] = cleaned_name
         
-        # Assegno ad ogni classe un indice numerico a partire da 0.
-        counter = 0
-        self.class_labels = {}
-        for c in self.classes:
-            self.class_labels[c] = counter
-            counter += 1
+        # Lascio solo valori univoci, senza numeri e ordinati alfabeticamente.
+        self.classes = sorted(list(set(self.original_to_cleaned.values())))
+        
+        # Assegno ad ogni classe un indice
+        self.class_labels = {c: i for i, c in enumerate(self.classes)}
         
         if self.debug:
             print('Classi trovate ed etichette assegnate:')
-        for c, l in self.class_labels.items():
-            if self.debug:
-                print(f'|__Classe [{c}]\t: etichetta [{l}]')
+            for c, l in self.class_labels.items():
+                if self.debug:
+                    print(f'|__Classe [{c}]\t: etichetta [{l}]')
 
     def __assign_labels(self) -> None:
         
         self.labels = []
         
-        class_distributions = {}
-        for c in self.classes:
-            class_distributions[c] = 0
+        class_distributions = {c: 0 for c in self.classes}
         
         for i in self.image_files:    
-            image_class = i.parts[-2]
-            class_distributions[image_class] += 1
-            self.labels.append(self.class_labels[image_class])
+            original_class = i.parts[-2]
+            cleaned_class = self.original_to_cleaned[original_class]
+            class_distributions[cleaned_class] += 1
+            self.labels.append(self.class_labels[cleaned_class])
         
         if self.debug:
             print('Distribuzione classi:')
-        for c, d in class_distributions.items():
-            if self.debug:
-                print(f'|__Classe [{c}]\t: {d} ({d/float(len(self.image_files)):.2f}%)')
+            for c, d in class_distributions.items():
+                if self.debug:
+                    print(f'|__Classe [{c}]\t: {d} ({d/float(len(self.image_files)):.2f}%)')
 
 if __name__ == '__main__':
 
-    cds = CustomDatasetShapes('../generatore_forme/dst/training')
+    cds = CustomDataset('../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Training')
     
     for i, data in enumerate(cds):
         if i == 10:

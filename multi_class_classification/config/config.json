@@ -2,8 +2,8 @@
     "io": {
         "training_folder": "../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Training",
         "validation_folder": "../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Validation",
-        "test_folder": "../generatore_forme/dst/test/Test",
-        "use_custom_dataset" : false,
+        "test_folder": "../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Test",
+        "use_custom_dataset" : true,
         "out_folder": "./out"
     },
     "parameters": {

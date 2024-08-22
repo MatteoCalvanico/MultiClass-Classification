@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from metrics import Metrics
 from visual_util import ColoredPrint as cp
-from custom_dataset_shapes import CustomDatasetShapes
+from custom_dataset_fruits import CustomDataset
 
 torch.manual_seed(42)
 np.random.seed(42)
@@ -411,11 +411,11 @@ class NetRunner():
         # - Posso farlo sia per i dati di training.
         # - Che per quelli di test e/o validazione.
         cp.cyan(f'Analyzing training dataset: {self.cfg.io.training_folder}')
-        tr_dataset = CustomDatasetShapes(root=self.cfg.io.training_folder, transform=transforms)
+        tr_dataset = CustomDataset(root=self.cfg.io.training_folder, transform=transforms)
         cp.cyan(f'Analyzing validation dataset: {self.cfg.io.validation_folder}')
-        va_dataset = CustomDatasetShapes(root=self.cfg.io.validation_folder, transform=transforms)
+        va_dataset = CustomDataset(root=self.cfg.io.validation_folder, transform=transforms)
         cp.cyan(f'Analyzing test dataset: {self.cfg.io.test_folder}')
-        te_dataset = CustomDatasetShapes(root=self.cfg.io.test_folder, transform=transforms)
+        te_dataset = CustomDataset(root=self.cfg.io.test_folder, transform=transforms)
         self.classes = tr_dataset.classes
 
         # Se non voglio usare il dataset custom, posso usarne uno di base fornito da PyTorch.
