@@ -3,6 +3,7 @@
         "training_folder": "../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Training",
         "validation_folder": "../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Validation",
         "test_folder": "../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Test",
+        "nets_folder": "./nets",
         "use_custom_dataset" : true,
         "out_folder": "./out"
     },
@@ -18,7 +19,7 @@
         "momentum": 0.9
     },
     "train_parameters": {
-        "network_type": "net_2",
+        "network_type": "net",
         "step_monitor": 5,
         "accuracy_target": 98,
         "accuracy_evaluation_epochs": 1,

@@ -14,6 +14,7 @@
                 "training_folder",
                 "validation_folder",
                 "test_folder",
+                "nets_folder",
                 "use_custom_dataset",
                 "out_folder"
             ],
@@ -21,6 +22,7 @@
                 "training_folder" : {"type" : "string"},
                 "validation_folder" : {"type" : "string"},
                 "test_folder" : {"type" : "string"},
+                "nets_folder" : {"type" : "string"},
                 "use_custom_dataset" : {"type" : "boolean"},
                 "out_folder" : {"type" : "string"}
             }

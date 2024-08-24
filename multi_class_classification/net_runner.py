@@ -1,3 +1,4 @@
+import os
 import sys
 import math
 import torch
@@ -9,6 +10,7 @@ import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
+import importlib
 
 from pathlib import Path
 from metrics import Metrics
@@ -392,13 +394,30 @@ class NetRunner():
     # Ottiene un oggetto 'rete' del tipo richiesto.
     def __get_net(self):
         
-        if self.cfg.train_parameters.network_type.lower() == 'net_1':
-            from nets.net_1 import Net
-        elif self.cfg.train_parameters.network_type.lower() == 'net_2':
-            from nets.net_2 import Net
-        else:
+        selectedNet = self.cfg.train_parameters.network_type.lower()
+        netsPath = os.path.join(self.cfg.io.nets_folder.lower(), f"{selectedNet}.py")
+        
+        if not os.path.exists(netsPath):
             print(f'Unknown net.')
             sys.exit(-1)
+        
+        # Importiamo il modulo dinamicamente
+        spec = importlib.util.spec_from_file_location(selectedNet, netsPath)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        
+        # Prendiamo la classe dal modulo appena importato
+        Net = getattr(module, 'Net')
+        
+        
+        #if self.cfg.train_parameters.network_type.lower() == 'net_1':
+        #    from nets.net_1 import Net
+        #elif self.cfg.train_parameters.network_type.lower() == 'net_2':
+        #    from nets.net import Net
+        #else:
+        #    print(f'Unknown net.')
+        #    sys.exit(-1)
+        
             
         return Net(self.classes)
     
