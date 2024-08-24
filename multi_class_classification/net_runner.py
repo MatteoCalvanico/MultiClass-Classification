@@ -398,7 +398,7 @@ class NetRunner():
         netsPath = os.path.join(self.cfg.io.nets_folder.lower(), f"{selectedNet}.py")
         
         if not os.path.exists(netsPath):
-            print(f'Unknown net.')
+            cp.red(f'Unknown net.')
             sys.exit(-1)
         
         # Importiamo il modulo dinamicamente
