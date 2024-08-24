@@ -116,6 +116,6 @@ class Metrics():
 
 if __name__ == '__main__':
     
-    mt = Metrics(['circle', 'square', 'triangle'], 20)
+    mt = Metrics(['classExample1', 'classExample2', 'classExample3'], 20)
     mt.report()
 
