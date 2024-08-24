@@ -39,7 +39,7 @@ La rete e i file di configurazione/utilità sono all'interno della cartella *mul
 FIle con il compito di estrarre le classi e dare le label alle immagini del dataset.
 
 Cambiamenti fatti:
-- in *__getitem__*: aggiunta la conversione in PIL Image;
+- in *\__getitem__*: aggiunta la conversione in PIL Image;
 - in *__find_classes_and_labels*: visto la struttura del dataset ora la funzione rimuove anche i numeri evitando duplicati che prima non venviano individuati;
 
 ### net_runner.py
