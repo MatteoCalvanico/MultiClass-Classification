@@ -59,7 +59,7 @@ class CustomDataset(Dataset):
         img = cv2.imread(self.image_files[index].as_posix())
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         
-        img = Image.fromarray(img)  # Convert to PIL Image
+        img = Image.fromarray(img)  # Conversione in PIL Image
         if self.transform:
             img = self.transform(img)
         class_idx = self.labels[index]
