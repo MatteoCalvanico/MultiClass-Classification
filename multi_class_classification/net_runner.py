@@ -401,13 +401,14 @@ class NetRunner():
             cp.red(f'Unknown net.')
             sys.exit(-1)
         
-        # Importiamo il modulo dinamicamente
-        spec = importlib.util.spec_from_file_location(selectedNet, netsPath)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        
-        # Prendiamo la classe dal modulo appena importato
-        Net = getattr(module, 'Net')
+        # Importiamo il modulo dinamicamente, se è già stato importato lo ricarichiamo
+        if selectedNet not in sys.modules:
+            spec = importlib.util.spec_from_file_location(selectedNet, netsPath)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            sys.modules[selectedNet] = module
+        else:
+            importlib.reload(sys.modules[selectedNet])
         
         
         #if self.cfg.train_parameters.network_type.lower() == 'net_1':
@@ -418,7 +419,7 @@ class NetRunner():
         #    print(f'Unknown net.')
         #    sys.exit(-1)
         
-            
+        Net = getattr(sys.modules[selectedNet], 'Net') # Prendiamo la classe dal modulo appena importato
         return Net(self.classes)
     
     # Carica i Dataset tramite Dataloader e scopre le classi del dataset.
