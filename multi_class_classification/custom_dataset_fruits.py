@@ -130,10 +130,10 @@ class CustomDataset(Dataset):
         # Raccolgo i nomi di tutte le sotto-cartelle, anche duplicati.
         sub_folder_names = [f.parts[-2] for f in self.image_files]
         
-        # Rimuovo i numeri dalle classi e creo un mapping tra i nomi vecchi (con i numeri) e i nuovi
+        # Rimuovo i numeri e l'underscore finale dalle classi e creo un mapping tra i nomi vecchi (con i numeri) e i nuovi
         self.original_to_cleaned = {}
         for name in sub_folder_names:
-            cleaned_name = re.sub(r'\d+', '', name)
+            cleaned_name = re.sub(r'_(\d+)', '', name)
             self.original_to_cleaned[name] = cleaned_name
         
         # Lascio solo valori univoci, senza numeri e ordinati alfabeticamente.
