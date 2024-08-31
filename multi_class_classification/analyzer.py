@@ -9,6 +9,8 @@ class Analyzer(Dataset):
     
     def __init__(self, root : str, debug: bool = False) -> None:
         
+        cp.purple('Initializing analyzer...')
+        
         self.data_path = Path(root)
         self.debug = debug
         self.info = {} # Qui andranno tutti i nomi delle classi sbilanciate, con anche quante immagini in più dovrebbero avere rispetto alla xlasse/directory con più dati
@@ -39,6 +41,7 @@ class Analyzer(Dataset):
         
         # Ora controllo se ogni sotto cartella è bilanciata
         self.__check_balance()
+
 
     def __analyze_root(self) -> bool:
         
@@ -103,10 +106,13 @@ class Analyzer(Dataset):
             counts[base_name] = counts.get(base_name, 0) + 1
 
         # Trovo il numero massimo di immagini
-        max_count = max(counts.values())
+        max_count = max(counts.values()) 
+        
+        cp.yellow(f"Class distribution before balancer for: {self.data_path}")
         
         #Mi salvo quali classi hanno bisogno di essere bilanciate, e di quanto
         for folder, count in counts.items():
+            cp.cyan(f"|__Class {folder}: {count/len(self.image_files):.2%} ({count})") # Stampo la distribuzione delle classi per la root passata
             if count < max_count:
                 self.info[folder] = max_count - count
 
