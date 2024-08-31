@@ -10,7 +10,8 @@ from PIL import Image
 
 class CustomDataset(Dataset):
 
-    def __init__(self, root : str, transform = None, debug: bool = False) -> None:
+    #Con 'skip = True' saltiamo i controlli sulle cartelle perchè fatti precedentemente
+    def __init__(self, root : str, skip: bool = False, transform = None, debug: bool = False) -> None:
 
         self.debug = debug
         
@@ -19,29 +20,30 @@ class CustomDataset(Dataset):
                 
         self.data_path = Path(root)
         
-        # Per prima cosa si controlla il percorso passato in 'root':
-        # - Esiste?
-        # - E' una cartella?
-        # Se ci sono problemi, esco dallo script.
-        if not self.__analyze_root():
-            cp.red("Error: path do not exist or is a directory !!!")
-            sys.exit(-1)
-        
-        # A questo punto la cartella e' valida:
-        # - Controllo se ci sono file immagine all'interno.
-        # - Le immagini le considero con estensione bmp, png, jpeg e jpg.
-        # Se non ci sono immagini, esco dallo script.
-        if not self.__search_image_files():
-            cp.red("Error: the directory do not have any images !!!")
-            sys.exit(-1)
+        if not skip:
+            # Per prima cosa si controlla il percorso passato in 'root':
+            # - Esiste?
+            # - E' una cartella?
+            # Se ci sono problemi, esco dallo script.
+            if not self.__analyze_root():
+                cp.red("Error: path do not exist or is a directory !!!")
+                sys.exit(-1)
+            
+            # A questo punto la cartella e' valida:
+            # - Controllo se ci sono file immagine all'interno.
+            # - Le immagini le considero con estensione bmp, png, jpeg e jpg.
+            # Se non ci sono immagini, esco dallo script.
+            if not self.__search_image_files():
+                cp.red("Error: the directory do not have any images !!!")
+                sys.exit(-1)
 
-        # A questo punto controllo la struttura di sotto-cartelle e file:
-        # - Voglio che nella root ci sia un solo livello di sotto-cartelle.
-        # - Il nome di ogni sotto-cartella sara' una classe di immagini.
-        # - In ogni sotto-cartella ci saranno solo immagini di quella classe.  
-        if not self.__check_structure():
-            cp.red("Error: the root have more than one level !!!")
-            sys.exit(-1)
+            # A questo punto controllo la struttura di sotto-cartelle e file:
+            # - Voglio che nella root ci sia un solo livello di sotto-cartelle.
+            # - Il nome di ogni sotto-cartella sara' una classe di immagini.
+            # - In ogni sotto-cartella ci saranno solo immagini di quella classe.  
+            if not self.__check_structure():
+                cp.red("Error: the root have more than one level !!!")
+                sys.exit(-1)
         
         # Con la certezza che la struttura delle cartelle e' corretta, si
         # possono estrarre i nomi delle classi dai nomi delle sotto-cartelle.
