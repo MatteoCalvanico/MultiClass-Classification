@@ -11,7 +11,7 @@ class Analyzer(Dataset):
         
         self.data_path = Path(root)
         self.debug = debug
-        self.info = {} # Qui andranno tutti i nomi delle directory sbilanciate, con anche quante immagini in più dovrebbero avere rispetto alla directory con più dati
+        self.info = {} # Qui andranno tutti i nomi delle classi sbilanciate, con anche quante immagini in più dovrebbero avere rispetto alla xlasse/directory con più dati
         
         # Per prima cosa si controlla il percorso passato in 'root':
         # - Esiste?
@@ -99,12 +99,13 @@ class Analyzer(Dataset):
         
         for image_file in self.image_files:
             folder_name = image_file.parent.name
-            counts[folder_name] = counts.get(folder_name, 0) + 1
+            base_name = re.sub(r'_(\d+)', '', folder_name)
+            counts[base_name] = counts.get(base_name, 0) + 1
 
         # Trovo il numero massimo di immagini
         max_count = max(counts.values())
         
-        #Mi salvo quali cartelle hanno bisogno di essere bilanciate, e di quanto
+        #Mi salvo quali classi hanno bisogno di essere bilanciate, e di quanto
         for folder, count in counts.items():
             if count < max_count:
                 self.info[folder] = max_count - count
