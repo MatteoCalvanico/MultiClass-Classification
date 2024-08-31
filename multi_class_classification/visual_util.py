@@ -33,7 +33,7 @@ class ColoredPrint():
     
     @staticmethod
     def purple(text: str):
-        ColoredPrint.cprint(text, 'purple')
+        print(f"\n{CONSOLE_COLOR_CODES.get('purple', '')}{text}{END_COLOR_CODE}")
     
     @staticmethod
     def cyan(text: str):
