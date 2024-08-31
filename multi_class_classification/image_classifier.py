@@ -20,7 +20,7 @@ if __name__ == "__main__":
         #TODO: Uso uno script per bilanciare le classi facendo data augmentation [se necessario]
 
     # Uso un data loader semplicemente per ricavare le classi del dataset.
-    classes = CustomDataset(root=cfg_obj.io.training_folder, skip=cfg_obj.parameters.balancer, transform=None, debug=True).classes
+    classes = CustomDataset(root=cfg_obj.io.training_folder, skip=cfg_obj.parameters.balancer, transform=None, debug=False).classes
 
     # Creo l'oggetto che mi permettera' di addestrare e testare il modello.
     runner = NetRunner(cfg_obj, classes)
