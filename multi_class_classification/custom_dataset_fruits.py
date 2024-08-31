@@ -20,6 +20,9 @@ class CustomDataset(Dataset):
                 
         self.data_path = Path(root)
         
+        image_extensions = ('.bmp', '.png', '.jpeg', '.jpg')
+        self.image_files = [x for x in self.data_path.glob('**/*') if x.is_file() and x.suffix in image_extensions]
+        
         if not skip:
             # Per prima cosa si controlla il percorso passato in 'root':
             # - Esiste?
@@ -95,11 +98,6 @@ class CustomDataset(Dataset):
         return True
         
     def __search_image_files(self) -> bool:
-        
-        image_extensions = ('.bmp', '.png', '.jpeg', '.jpg')
-        
-        self.image_files = [x for x in self.data_path.glob('**/*') 
-                            if x.is_file() and x.suffix in image_extensions]
         
         if len(self.image_files) > 0:
             if self.debug:
