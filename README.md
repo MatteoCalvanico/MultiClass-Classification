@@ -35,10 +35,14 @@ Lo scopo ultimo della rete è di riuscire a classificare diversi tipi di frutta 
 ## Structure
 La rete e i file di configurazione/utilità sono all'interno della cartella *multi_class_classification*, di seguito la spiegazione di ciascun file o directory che sono stati modificati rispetto al template di partenza:
 
+### analyzer.py
+File con il compito di controllare quali classi sono sbilanciate, andato a controllare se per ogni cartella ci sono meno file rispetto a quelli della classe più grande.
+
 ### custom_dataset_fruits.py
 FIle con il compito di estrarre le classi e dare le label alle immagini del dataset.
 
 Cambiamenti fatti:
+- aggiunto il parametro *skip*, che peremtte di evitare il controllo delle directory se fatto già dall'analyzer;
 - in *\__getitem__*: aggiunta la conversione in PIL Image;
 - in *__find_classes_and_labels*: visto la struttura del dataset ora la funzione rimuove anche i numeri evitando duplicati che prima non venviano individuati;
 

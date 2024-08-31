@@ -10,9 +10,9 @@ if __name__ == "__main__":
     cfg_obj = check_and_get_configuration('./config/config.json', './config/config_schema.json')
     
     # Uso un analizzatore per controllare che tutte le classi siano bilanciate
-    infoTrainDir = Analyzer(cfg_obj.io.training_folder, debug=False)
-    infoValDir = Analyzer(cfg_obj.io.validation_folder, debug=False)
-    infoTestDir = Analyzer(cfg_obj.io.test_folder, debug=False)
+    infoTrainDir = Analyzer(cfg_obj.io.training_folder, debug=False).info
+    infoValDir = Analyzer(cfg_obj.io.validation_folder, debug=False).info
+    infoTestDir = Analyzer(cfg_obj.io.test_folder, debug=False).info
     
     #TODO: Uso uno script per bilanciare le classi facendo data augmentation [se necessario]
 
