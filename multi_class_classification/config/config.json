@@ -9,7 +9,8 @@
     },
     "parameters": {
         "train": true,
-        "test": false,
+        "test": true,
+        "balancer": true,
         "show_preview": false
     },
     "hyper_parameters": {

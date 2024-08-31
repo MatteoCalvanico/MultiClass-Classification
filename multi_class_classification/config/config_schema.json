@@ -32,11 +32,13 @@
             "required" : [
                 "train",
                 "test",
+                "balancer",
                 "show_preview"
             ],
             "properties" : {
                 "train" : {"type" : "boolean"},
                 "test" : {"type" : "boolean"},
+                "balancer" : {"type" : "boolean"},
                 "show_preview" : {"type" : "boolean"}
             }
         },
