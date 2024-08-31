@@ -1,6 +1,7 @@
 from net_runner import NetRunner
 from config_helper import check_and_get_configuration
 from custom_dataset_fruits import CustomDataset
+from analyzer import Analyzer
 
 
 if __name__ == "__main__":
@@ -8,7 +9,10 @@ if __name__ == "__main__":
     # Carica il file di configurazione, lo valido e ne creo un oggetto a partire dal json.
     cfg_obj = check_and_get_configuration('./config/config.json', './config/config_schema.json')
     
-    #TODO: Uso un analizzatore per controllare che tutte le classi siano bilanciate
+    # Uso un analizzatore per controllare che tutte le classi siano bilanciate
+    infoTrainDir = Analyzer(cfg_obj.io.training_folder, debug=False)
+    infoValDir = Analyzer(cfg_obj.io.validation_folder, debug=False)
+    infoTestDir = Analyzer(cfg_obj.io.test_folder, debug=False)
     
     #TODO: Uso uno script per bilanciare le classi facendo data augmentation [se necessario]
 
