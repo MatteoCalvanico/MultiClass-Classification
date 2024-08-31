@@ -114,5 +114,9 @@ if __name__ == '__main__':
 
     cds = Analyzer('../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Training')
     
+    if not cds.info:
+        print("Nessuna cartella sbilanciata.")
+        sys.exit(-1)
+    
     for i, data in cds.info.items():
         print(f'Dir: {i} ha bisogno di [{data}] nuove immagini per essere bilanciata')
