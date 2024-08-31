@@ -7,9 +7,13 @@ if __name__ == "__main__":
     
     # Carica il file di configurazione, lo valido e ne creo un oggetto a partire dal json.
     cfg_obj = check_and_get_configuration('./config/config.json', './config/config_schema.json')
+    
+    #TODO: Uso un analizzatore per controllare che tutte le classi siano bilanciate
+    
+    #TODO: Uso uno script per bilanciare le classi facendo data augmentation [se necessario]
 
     # Uso un data loader semplicemente per ricavare le classi del dataset.
-    classes = CustomDataset(root=cfg_obj.io.training_folder, transform=None).classes
+    classes = CustomDataset(root=cfg_obj.io.training_folder, skip=True, transform=None, debug=True).classes
 
     # Creo l'oggetto che mi permettera' di addestrare e testare il modello.
     runner = NetRunner(cfg_obj, classes)
