@@ -2,10 +2,9 @@ import sys
 import re
 
 from pathlib import Path
-from torch.utils.data import Dataset
 from visual_util import ColoredPrint as cp
 
-class Analyzer(Dataset):
+class Analyzer():
     
     def __init__(self, root : str, debug: bool = False) -> None:
         
@@ -112,7 +111,7 @@ class Analyzer(Dataset):
         
         #Mi salvo quali classi hanno bisogno di essere bilanciate, e di quanto
         for folder, count in counts.items():
-            cp.cyan(f"|__Class {folder}: {count/len(self.image_files):.2%} ({count})") # Stampo la distribuzione delle classi per la root passata
+            cp.cyan(f"|__Class {folder}: {count/len(self.image_files):.2%} ({count})") # Stampo la distribuzione delle classi per la root passata e le immagini presenti
             if count < max_count:
                 self.info[folder] = max_count - count
 
