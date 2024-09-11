@@ -41,7 +41,7 @@ File con il compito di controllare quali classi sono sbilanciate, andato a contr
 Stampa anche la distribuzione delle classi e quante immagini ci sono al momento per classe.
 
 ### balancer.py
-Prende dall'analyzer quali classi sono sbilanciate e aggiunge tante immagini quante ne sono richieste per bilanciare il tutto. Per farlo applica delle trasformazioni randomiche alle varie immagini (come rotazioni, ridimensioni e traslazioni).
+Prende dall'analyzer quali classi sono sbilanciate e aggiunge tante immagini quante ne sono richieste per bilanciare il tutto. Per farlo applica delle trasformazioni randomiche alle varie immagini (come rotazioni e traslazioni).
 
 ### custom_dataset_fruits.py
 FIle con il compito di estrarre le classi e dare le label alle immagini del dataset.
