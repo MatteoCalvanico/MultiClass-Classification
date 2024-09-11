@@ -32,17 +32,20 @@ class Balancer():
     
     def __trasform(self, path: Path, numImg) -> None:
 
-        while numImg > 0:
-            for img in path.glob('**/*'):
-                cv2Img = cv2.imread(img) # Leggiamo l'immagine con cv2
+        for img in path.glob('**/*'):
+            
+            if numImg <= 0: #Quando abbiamo abbastanza immagini ci fermiamo
+                break
+            
+            cv2Img = cv2.imread(img) # Leggiamo l'immagine con cv2
                 
-                cv2Img = self.__rotate(cv2Img)    # Facciamo una rotazione
-                cv2Img = self.__translate(cv2Img) # Trasliamo l'immagine
+            cv2Img = self.__rotate(cv2Img)    # Facciamo una rotazione
+            cv2Img = self.__translate(cv2Img) # Trasliamo l'immagine
                 
-                base_name, ext = os.path.splitext(img) #Otteniamo l'estenzione dell'immagine di partenza (e il nome)
-                cv2.imwrite(os.path.join(path, "balImg_" + str(numImg) + ext), cv2Img)
+            base_name, ext = os.path.splitext(img) #Otteniamo l'estenzione dell'immagine di partenza (e il nome)
+            cv2.imwrite(os.path.join(path, "balImg_" + str(numImg) + ext), cv2Img)
                 
-                numImg -= 1
+            numImg -= 1
     
     def __rotate(self, img):
         rows, cols = img.shape[0], img.shape[1]
