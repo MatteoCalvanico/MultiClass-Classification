@@ -18,13 +18,15 @@ class Balancer():
             cp.red(f"No need to balance this root: {root}")
             sys.exit(-1)
         
-        cp.purple('Initializing balancer...')
+        cp.purple(f'Initializing balancer in {root}...')
         
         self.data_path = Path(root)
         self.debug = debug
         
         # Per ogni classe facciamo delle trasformazioni
         for classes, img in infoDir.items():
+            cp.yellow(f"Starting to balancing: {classes} class")
+            
             paths = glob.glob(f"{self.data_path}/{classes}_?") # Ci salviamo i percorsi completi delle directory da dove sono prese le immagini di ogni classe. Il "?" indica un solo valore dopo il "_" 
             
             self.__trasform(Path(paths[0]), img) # Creiamo tot immagini nuove nella prima directory trovata facendo trasformazioni sulle immagini giù presenti
