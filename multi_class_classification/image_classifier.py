@@ -2,6 +2,7 @@ from net_runner import NetRunner
 from config_helper import check_and_get_configuration
 from custom_dataset_fruits import CustomDataset
 from analyzer import Analyzer
+from balancer import Balancer
 
 
 if __name__ == "__main__":
@@ -13,11 +14,14 @@ if __name__ == "__main__":
     if cfg_obj.parameters.balancer:
         
         # Uso un analizzatore per controllare che tutte le classi siano bilanciate
-        infoTrainDir = Analyzer(cfg_obj.io.training_folder, debug=False).info
-        infoValDir = Analyzer(cfg_obj.io.validation_folder, debug=False).info
-        infoTestDir = Analyzer(cfg_obj.io.test_folder, debug=False).info
+        infoTrainDir = Analyzer(cfg_obj.io.training_folder).info
+        infoValDir = Analyzer(cfg_obj.io.validation_folder).info
+        infoTestDir = Analyzer(cfg_obj.io.test_folder).info
         
-        #TODO: Uso uno script per bilanciare le classi facendo data augmentation [se necessario]
+        #Uso uno script per bilanciare le classi facendo data augmentation [se necessario]
+        Balancer(infoTrainDir, cfg_obj.io.training_folder)
+        Balancer(infoValDir, cfg_obj.io.validation_folder)
+        Balancer(infoTestDir, cfg_obj.io.test_folder)
 
     # Uso un data loader semplicemente per ricavare le classi del dataset.
     classes = CustomDataset(root=cfg_obj.io.training_folder, skip=cfg_obj.parameters.balancer, transform=None, debug=False).classes
