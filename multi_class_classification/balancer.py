@@ -29,25 +29,28 @@ class Balancer():
             
             paths = glob.glob(f"{self.data_path}/{classes}_?") # Ci salviamo i percorsi completi delle directory da dove sono prese le immagini di ogni classe. Il "?" indica un solo valore dopo il "_" 
             
-            self.__trasform(Path(paths[0]), img) # Creiamo tot immagini nuove nella prima directory trovata facendo trasformazioni sulle immagini giù presenti
+            if not paths:
+                cp.red("No paths found")
+            else:
+                self.__trasform(Path(paths[0]), img) # Creiamo tot immagini nuove nella prima directory trovata facendo trasformazioni sulle immagini giù presenti
             
     
     def __trasform(self, path: Path, numImg) -> None:
-
-        for img in path.glob('**/*'):
-            
-            if numImg <= 0: #Quando abbiamo abbastanza immagini ci fermiamo
-                break
-            
-            cv2Img = cv2.imread(img) # Leggiamo l'immagine con cv2
+        
+        images = [img for img in path.glob('**/*.jpg') if img.name.startswith('r')][:numImg] # Prendiamo solo immagini originali (iniziano con 'r') per modificarle
+        
+        while(numImg > 0):
+            for img in images:
                 
-            cv2Img = self.__rotate(cv2Img)    # Facciamo una rotazione
-            cv2Img = self.__translate(cv2Img) # Trasliamo l'immagine
-                
-            base_name, ext = os.path.splitext(img) #Otteniamo l'estenzione dell'immagine di partenza (e il nome)
-            cv2.imwrite(os.path.join(path, "balImg_" + str(numImg) + ext), cv2Img)
-                
-            numImg -= 1
+                cv2Img = cv2.imread(img) # Leggiamo l'immagine con cv2
+                        
+                cv2Img = self.__rotate(cv2Img)    # Facciamo una rotazione
+                cv2Img = self.__translate(cv2Img) # Trasliamo l'immagine
+                        
+                base_name, ext = os.path.splitext(img) #Otteniamo l'estenzione dell'immagine di partenza (e il nome)
+                cv2.imwrite(os.path.join(path, "balImg_" + str(numImg) + ext), cv2Img)
+                        
+                numImg -= 1
     
     def __rotate(self, img):
         rows, cols = img.shape[0], img.shape[1]
@@ -73,4 +76,4 @@ class Balancer():
 
 if __name__ == "__main__":
     
-    b = Balancer({'prova': 1}, "../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Test")
+    b = Balancer({'prova': 5}, "../dataset/fruits-360_dataset_original-size/fruits-360-original-size/Test")
