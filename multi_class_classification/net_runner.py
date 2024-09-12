@@ -333,7 +333,7 @@ class NetRunner():
             net = self.__get_net()
             
             try:
-                net.load_state_dict(torch.load(self.best_model_outpath_sd))
+                net.load_state_dict(torch.load(self.best_model_outpath_sd, weights_only=True)) # Aggiunto weights_only=True per evitare warning
             except:
                 print('Missing model state_dict.')
                 return
@@ -407,8 +407,8 @@ class NetRunner():
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             sys.modules[selectedNet] = module
-        else:
-            importlib.reload(sys.modules[selectedNet])
+        #else:
+            #importlib.reload(sys.modules[selectedNet])
         
         
         #if self.cfg.train_parameters.network_type.lower() == 'net_1':
