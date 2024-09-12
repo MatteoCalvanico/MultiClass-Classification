@@ -10,7 +10,7 @@ if __name__ == "__main__":
     # Carica il file di configurazione, lo valido e ne creo un oggetto a partire dal json.
     cfg_obj = check_and_get_configuration('./config/config.json', './config/config_schema.json')
     
-    #Se nel file di configurazione è stato scelto di bilanciare allora uso l'analyzer e poi il balancer
+    # Se nel file di configurazione è stato scelto di bilanciare allora uso l'analyzer e poi il balancer
     if cfg_obj.parameters.balancer:
         
         # Uso un analizzatore per controllare che tutte le classi siano bilanciate
