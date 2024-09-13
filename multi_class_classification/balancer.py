@@ -16,24 +16,23 @@ class Balancer():
         # Per farlo vediamo se il dizionario con le informazioni è vuoto
         if not infoDir:  
             cp.red(f"No need to balance this root: {root}")
-            sys.exit(-1)
-        
-        cp.purple(f'Initializing balancer in {root}...')
-        
-        self.data_path = Path(root)
-        self.debug = debug
-        
-        # Per ogni classe facciamo delle trasformazioni
-        for classes, img in infoDir.items():
-            cp.yellow(f"Starting to balancing: {classes} class")
+        else:
+            cp.purple(f'Initializing balancer in {root}...')
             
-            paths = glob.glob(f"{self.data_path}/{classes}_?") # Ci salviamo i percorsi completi delle directory da dove sono prese le immagini di ogni classe. Il "?" indica un solo valore dopo il "_" 
+            self.data_path = Path(root)
+            self.debug = debug
             
-            if not paths:
-                cp.red("No paths found")
-            else:
-                self.__trasform(Path(paths[0]), img) # Creiamo tot immagini nuove nella prima directory trovata facendo trasformazioni sulle immagini giù presenti
-            
+            # Per ogni classe facciamo delle trasformazioni
+            for classes, img in infoDir.items():
+                cp.yellow(f"Starting to balancing: {classes} class")
+                
+                paths = glob.glob(f"{self.data_path}/{classes}_?") # Ci salviamo i percorsi completi delle directory da dove sono prese le immagini di ogni classe. Il "?" indica un solo valore dopo il "_" 
+                
+                if not paths:
+                    cp.red("No paths found")
+                else:
+                    self.__trasform(Path(paths[0]), img) # Creiamo tot immagini nuove nella prima directory trovata facendo trasformazioni sulle immagini giù presenti
+                
     
     def __trasform(self, path: Path, numImg) -> None:
         
@@ -41,6 +40,9 @@ class Balancer():
         
         while(numImg > 0):
             for img in images:
+                
+                if(numImg <= 0): # Nel caso il numero richiesto venga raggiunto prima
+                    break
                 
                 cv2Img = cv2.imread(img) # Leggiamo l'immagine con cv2
                         
