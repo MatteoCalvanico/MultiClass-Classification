@@ -38,6 +38,15 @@ Lo scopo ultimo della rete è di riuscire a classificare diversi tipi di frutta 
 - Funzione di loss: Cross-Entropy;
 - Ottimizzatore: SGD (Stochastic Gradient Descent). 
 
+## Analysis & Experiments
+Oltre alla rete e i suoi file potete trovare un file Notebook chiamato *Dataset_Analysis.ipynb* che mostra alcune informazioni sul dataset utilizzato.
+
+**[TODO]** Potete anche consultare i vari risultati ottenuti da diversi esperimenti come:
+- addestramento per diversi numeri di epoche.
+- addestramento con un diverso numero di layer.
+- addestramento con diversi valori di learning rate.
+Tutto nel file *Report.md*
+
 ## Structure
 La rete e i file di configurazione/utilità sono all'interno della cartella *multi_class_classification*, di seguito la spiegazione dei file o directory più importanti:
 
