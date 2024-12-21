@@ -45,6 +45,7 @@ Oltre alla rete e i suoi file potete trovare un file Notebook chiamato *Dataset_
 - addestramento per diversi numeri di epoche.
 - addestramento con un diverso numero di layer.
 - addestramento con diversi valori di learning rate.
+  
 Tutto nel file *Report.md*
 
 ## Structure
