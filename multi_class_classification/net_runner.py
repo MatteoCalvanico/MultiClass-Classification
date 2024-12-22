@@ -1,3 +1,4 @@
+import io
 import os
 import sys
 import math
@@ -8,9 +9,13 @@ import torch.utils.data.dataloader
 import torchvision
 import numpy as np
 import torch.nn as nn
+import seaborn as sns
 import torch.optim as optim
 import matplotlib.pyplot as plt
+from PIL import Image
 import importlib
+
+from torch.utils.tensorboard import SummaryWriter
 
 from pathlib import Path
 from metrics import Metrics
@@ -77,6 +82,11 @@ class NetRunner():
     def train(self) -> None:
         
         cp.purple("Training...")
+        
+        # Inizializzazione della Tensorboard.
+        writer = SummaryWriter(self.out_root / 'runs') # I log saranno dentro la cartella runs in out
+        dummy_input = torch.randn(1, 3, 224, 224)
+        writer.add_graph(self.net, dummy_input) 
         
         # Conteggio degli step totali.
         global_step = 0
@@ -178,12 +188,14 @@ class NetRunner():
                 self.optimizer.step()
 
                 # Monitoraggio statistiche.
+                writer.add_scalar('Loss/train_step', loss.item(), epoch * len(self.tr_loader) + i) # Log della loss.
                 running_loss += loss.item()
                 
                 if (i + 1) % train_step_monitor == 0:
                     tr_run_losses_y.append(running_loss / train_step_monitor)
                     tr_run_losses_x.append(global_step)
                     print(f'global_step: {global_step:5d} - [ep: {epoch + 1:3d}, step: {i + 1:5d}] loss: {loss.item():.6f} - running_loss: {(running_loss / train_step_monitor):.6f}')
+                    writer.add_scalar('Loss/running_average', running_loss / train_step_monitor, global_step) # Log della loss running average.
                     running_loss = 0.0
                 
                 tr_losses_y.append(loss.item())
@@ -220,7 +232,7 @@ class NetRunner():
                         loss += self.criterion(outputs, labels)
 
                         current_va_loss += loss.item()
-                        current_va_loss_counter += 1
+                        current_va_loss_counter += 1  
                 
                 va_loss = current_va_loss / current_va_loss_counter
                 va_losses_x.append(global_step)
@@ -247,7 +259,7 @@ class NetRunner():
                     cp.red(f'... validation loss NOT improved')
                     va_loss_no_improve_ep_ctr += 1
             
-            # Calcolo l'accuratezza sui dati di training e validazione:
+            # Calcolo l'accuratezza sui dati di training e validazione e delle matrici di confusione:
             # - Se sono passate il numero atteso di epoche.
             # - Se e' l'ultima epoca di training.
             if (epoch + 1) % accuracy_evaluation_epochs == 0 or (epoch + 1) == epochs:
@@ -261,6 +273,59 @@ class NetRunner():
                 # Valutazione su dataset di validazione.
                 va_acc = self.test(self.va_loader, use_current_net=True) * 100
                 cp.blue('...on validation data...')
+                
+                cp.cyan("\n... Computing confusion matrices ...")
+                # Calcolo delle confusion matrices per training e validation.
+                # - Per farlo, si passano tutti i dati di training e validation.
+                # - Si raccolgono le etichette reali e predette.
+                # - Si calcolano le confusion matrices.
+                # - Si plottano le confusion matrices.
+                # - Si loggano le confusion matrices.
+                    
+                # Serviranno per rappresentare le performance della rete, nel dettaglio:
+                # - Le etichette reali.
+                # - Le etichette predette.
+                # In modo da capire dove la rete sbaglia.
+                self.net.eval()
+                with torch.no_grad():
+                    cp.purple('Getting predictions...')
+                    cp.blue('...on training data...')
+                    tr_real_y = []
+                    tr_pred_y = []
+                    for data in self.tr_loader:
+                        images, labels = data
+                        outputs = self.net(images)
+                        _, predicted = torch.max(outputs.data, 1)
+                        tr_real_y.extend(labels.tolist())
+                        tr_pred_y.extend(predicted.tolist())
+                    
+                    cp.purple('Getting predictions...')
+                    cp.blue('...on validation data...')
+                    va_real_y = []
+                    va_pred_y = []
+                    for data in self.va_loader:
+                        images, labels = data
+                        outputs = self.net(images)
+                        _, predicted = torch.max(outputs.data, 1)
+                        va_real_y.extend(labels.tolist())
+                        va_pred_y.extend(predicted.tolist())
+                    
+                    # Plot confusion matrices
+                    cp.cyan("... Plotting confusion matrices ...")
+                    tr_metrics = Metrics(self.classes, tr_real_y, tr_pred_y)
+                    va_metrics = Metrics(self.classes, va_real_y, va_pred_y)
+                    
+                    tr_metrics.compute_confusion_matrix()
+                    va_metrics.compute_confusion_matrix()
+                    
+                    cp.cyan("... Saving confusion matrices to Tensorboard ...")
+                    tr_cm_image = self.__plot_confusion_matrix(tr_metrics.confusion_matrix, 'Training Confusion Matrix')
+                    va_cm_image = self.__plot_confusion_matrix(va_metrics.confusion_matrix, 'Validation Confusion Matrix')
+                    
+                    writer.add_image('Confusion Matrix/Training', np.array(tr_cm_image), global_step, dataformats='HWC') # Log della confusion matrix (training).
+                    writer.add_image('Confusion Matrix/Validation', np.array(va_cm_image), global_step, dataformats='HWC') # Log della confusion matrix (validation).
+                    cp.green("... Confusion matrices saved ...")
+                self.net.train()
                 
                 tr_improved, va_improved = False, False
                 
@@ -287,7 +352,8 @@ class NetRunner():
                 # Se entrambe le accuracy hanno raggiunto il target, alzo il FLAG.
                 # Prima della prossima epoca, l'addestramento si fermera'.
                 if best_tr_acc > accuracy_target and best_va_acc > accuracy_target:
-                    target_accuracy_reached = True                
+                    target_accuracy_reached = True    
+                            
 
             # Se la loss di validazione non migliora da 'patience' epoche, e' il
             # momento di alzare il FLAG e richiedere l'early stop.
@@ -312,6 +378,7 @@ class NetRunner():
         ax2.set_title('Validation loss')
         ax2.legend()
 
+        writer.close()
         plt.tight_layout()
         plt.show()
     
@@ -457,3 +524,21 @@ class NetRunner():
         self.tr_loader = torch.utils.data.DataLoader(tr_dataset, batch_size=self.cfg.hyper_parameters.batch_size, shuffle=True)
         self.va_loader = torch.utils.data.DataLoader(va_dataset, batch_size=self.cfg.hyper_parameters.batch_size, shuffle=False)
         self.te_loader = torch.utils.data.DataLoader(te_dataset, batch_size=self.cfg.hyper_parameters.batch_size, shuffle=False)   
+    
+    # Visualizza la matrice di confusione.
+    def __plot_confusion_matrix(self, confusion_matrix, title):
+        plt.figure(figsize=(10,8))
+        sns.heatmap(confusion_matrix, annot=True, fmt='d', cmap='Blues',
+                    xticklabels=self.classes, yticklabels=self.classes)
+        plt.title(title)
+        plt.ylabel('True')
+        plt.xlabel('Predicted')
+        
+        # Convertiamo il grafico in immagine.
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        image = Image.open(buf)
+        plt.close()
+        
+        return image

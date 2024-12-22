@@ -48,6 +48,15 @@ Oltre alla rete e i suoi file potete trovare un file Notebook chiamato *Dataset_
   
 Tutto nel file *Report.md*
 
+## Tensorboard
+Utilizzando, all'interno della directory contenente i vari file, il seguente comando:
+```sh
+tensorboard --logdir=out/runs --port=6006 --reload_interval=1
+```
+sarà possibile visualizzare:
+- l'andamento, durante il train, della *loss* per ciascun training step e la *average loss* su più step;
+- le **confusion matrix** di train e validation.
+
 ## Structure
 La rete e i file di configurazione/utilità sono all'interno della cartella *multi_class_classification*, di seguito la spiegazione dei file o directory più importanti:
 
