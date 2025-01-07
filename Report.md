@@ -22,6 +22,8 @@ In questo esperiemento useremo diverse *reti* (con num di layer differenti) con 
 | Deep CNN     |       99.0%       |        99.0%        | Più layers di convoluzione, stesso numero di filtri della Base ma con un layer denso extra nel classificatore, target accuracy raggiunto alla 7° epoch (alla 5° accuracy pari al 95%) |
 | Wide CNN     |       98.9%       |        98.7%        | Stesso numero di layer della Base, ma con il doppio dei filtri, target accuracy raggiunto alla 5° epoch, con la prima epoch che aveva una accuracy già al 80%. |
 
+Come è possibile notare dai dati ottenuti raggiunta la 5 epoch i valori di accuracy sono tutti abbastanza simili, ma la vera differenza si vede nelle prime fasi di addestramento, infatti nella *Wide* già dalla prima epoch si ha un accuracy molto alta.
+
 ## Experiment 3: Learning Rate
 In questo esperiemento modificheremo il *learning rate*. L'esperimento è fatto su una *Base CNN*.
 
