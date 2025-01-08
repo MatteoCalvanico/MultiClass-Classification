@@ -41,7 +41,7 @@ Lo scopo ultimo della rete è di riuscire a classificare diversi tipi di frutta 
 ## Analysis & Experiments
 Oltre alla rete e i suoi file potete trovare un file Notebook chiamato *Dataset_Analysis.ipynb* che mostra alcune informazioni sul dataset utilizzato.
 
-**[TODO]** Potete anche consultare i vari risultati ottenuti da diversi esperimenti come:
+Potete anche consultare i vari risultati ottenuti da diversi esperimenti come:
 - addestramento per diversi numeri di epoche.
 - addestramento con un diverso numero di layer.
 - addestramento con diversi valori di learning rate.
@@ -58,6 +58,29 @@ sarà possibile visualizzare:
 - le **confusion matrix** di train e validation.
 
 ## Structure
+root/
+├── multi_class_classification/
+│   ├── config/
+│   │   ├── 
+│   ├── nets/
+│   │   ├── net.py
+│   ├── out/
+│   │   ├── 
+│   ├── .py
+│   ├── .py
+│   ├── .py
+│   ├── .py
+│   ├── .py
+│   ├── .py
+│   ├── .py
+│   ├── .py
+│   ├── .py
+├── requirements/
+│   ├── ...                       # Files per il setup dell'ambiente CONDA
+├── Dataset_Analysis.ipynb        # Analisi sul dataset
+├── Report.md                     # Risultati ottenuti su vari test
+├── ...
+
 La rete e i file di configurazione/utilità sono all'interno della cartella *multi_class_classification*, di seguito la spiegazione dei file o directory più importanti:
 
 ### config directory
