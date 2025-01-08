@@ -58,6 +58,7 @@ sarà possibile visualizzare:
 - le **confusion matrix** di train e validation.
 
 ## Structure
+```
 root/
 ├── multi_class_classification/
 │   ├── config/
@@ -80,7 +81,7 @@ root/
 ├── Dataset_Analysis.ipynb        # Analisi sul dataset
 ├── Report.md                     # Risultati ottenuti su vari test
 ├── ...
-
+```
 La rete e i file di configurazione/utilità sono all'interno della cartella *multi_class_classification*, di seguito la spiegazione dei file o directory più importanti:
 
 ### config directory
