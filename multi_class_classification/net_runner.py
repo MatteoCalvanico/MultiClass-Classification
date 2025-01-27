@@ -71,7 +71,7 @@ class NetRunner():
         
         # Funzione di costo.
         cp.cyan(f'Created loss function.')
-        self.criterion = nn.CrossEntropyLoss()
+        self.criterion = nn.CrossEntropyLoss() # Include la Funzione di attivazione 'Softmax'
         
         # Ottimizzatore.
         cp.cyan(f'Created optimizer (lr: {self.cfg.hyper_parameters.learning_rate}, m: {self.cfg.hyper_parameters.momentum}).')
