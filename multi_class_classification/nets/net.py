@@ -32,6 +32,9 @@ class Net(nn.Module):
         self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
         
         # Raccolta di layer densi per la classificazione.
+        # - Tramite 'Dropout' disattivo casualmente metà dei neuroni per prevenire overfitting, cioè evitare che la rete si basi troppo su certi percorsi
+        # - Tramite 'Linear' creo un layer "fully connected", andando a trasformare il vettore
+        # - Tramite 'ReLU' sostituisco tutti i valori negativi con 0
         self.classifier = nn.Sequential(
             nn.Dropout(p=dropout),
             nn.Linear(256 * 6 * 6, 4096),
