@@ -12,11 +12,14 @@ class Net(nn.Module):
         super(Net, self).__init__()
 
         # Raccolta di layer per l'estrazione delle caratteristiche.
+        # - Tramite 'Conv2d' elaboro l'immagine per estrarre caratteristiche, muovendomi lungo l'immagine di un passo pari allo "stride"
+        # - Tramite'ReLU' introduco non-linearità sostituendo valori negativi con 0
+        # - Tramite 'MaxPool2d' prendo il valore massimo, utile per mantenere le caratteristiche più pronunciate.
         self.features = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
+            nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2), # Estrazione caratteristiche base (bordi, gradienti, ...) 
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
-            nn.Conv2d(64, 192, kernel_size=5, padding=2),
+            nn.Conv2d(64, 192, kernel_size=5, padding=2), # Rilevazione forme semplici
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
             nn.Conv2d(192, 384, kernel_size=3, padding=1),
@@ -29,12 +32,13 @@ class Net(nn.Module):
         )
 
         # Layer di pooling.
+        # Tramite AdaptiveAvgPool2d calcolo la media dei valori con un output a matrice 6x6 per ogni canale.
         self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
         
         # Raccolta di layer densi per la classificazione.
-        # - Tramite 'Dropout' disattivo casualmente metà dei neuroni per prevenire overfitting, cioè evitare che la rete si basi troppo su certi percorsi
-        # - Tramite 'Linear' creo un layer "fully connected", andando a trasformare il vettore
-        # - Tramite 'ReLU' sostituisco tutti i valori negativi con 0
+        # - Tramite 'Dropout' disattivo casualmente metà dei neuroni per prevenire overfitting, cioè evitare che la rete si basi troppo su certi percorsi.
+        # - Tramite 'Linear' creo un layer "fully connected", andando a trasformare il vettore.
+        # - Tramite 'ReLU' sostituisco tutti i valori negativi con 0.
         self.classifier = nn.Sequential(
             nn.Dropout(p=dropout),
             nn.Linear(256 * 6 * 6, 4096),
