@@ -38,8 +38,8 @@ Lo scopo ultimo della rete è di riuscire a classificare diversi tipi di frutta 
 - Funzione di loss: Cross-Entropy;
 - Ottimizzatore: SGD (Stochastic Gradient Descent).
 
-La scelta della loss function di tipo *Cross-Entropy* è dovuta al fatto che è particolarmente adatta per problemi di classificazione multiclasse, penalizzando fortemente le previsioni errate con alta confidenza e integrando già Softmax.
-Per l'ottimizzatore si è deciso di usare SDG perchè efficiente e robusto nel trovare buone soluzioni.
+La scelta della loss function di tipo *Cross-Entropy* è dovuta al fatto che è particolarmente adatta per problemi di classificazione multiclasse, penalizzando fortemente le previsioni errate con alta confidenza e integra già Softmax.
+Per l'ottimizzatore si è deciso di usare *SGD* perchè efficiente e robusto nel trovare buone soluzioni.
 
 ## Analysis & Experiments
 Oltre alla rete e i suoi file potete trovare un file Notebook chiamato *Dataset_Analysis.ipynb* che mostra alcune informazioni sul dataset utilizzato.
